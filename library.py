@@ -33,8 +33,8 @@ class Library():
 
     #Finds a book by title abd removes it: raise error if its not found:
     def remove_book(self, title):
-        #Searches the books in collection to delete the correct title:
-        for book in self.collection:
+        #Creates a shoallow copy of self.collection to iterate through it:
+        for book in self.collection[:]:
             if book.title == title:
                 self.collection.remove(book)
                 return
@@ -42,7 +42,7 @@ class Library():
         raise Exception(f"Book {title} wasn't found.")
 
     #Searches for the book title and returns it:
-    def search_book(self, title):
+    def find_book(self, title):
         #Searches for the book by title in colection:
         for book in self.collection:
             if book.title == title:
@@ -60,15 +60,19 @@ class Library():
 
     #Returns all read books:
     def list_read_books(self):
+        count = 1
         for book in self.collection:
             if book.read_status == True:
-                print(book)
+                print(f"{count}) {book}")
+                count += 1
 
     #Returns all unread books:
     def list_unread_books(self):
+        count = 1
         for book in self.collection:
             if book.read_status == False:
-                print (book)
+                print(f"{count}) {book}")
+                count += 1
 
     #Saves the books to the json file:
     def save_to_json(self):
@@ -82,8 +86,11 @@ class Library():
 
     #Loads the books from the json file:
     def load_from_json(self):
-        with open("library.json", "r," encoding = "utf-8") as f:
-            json.load(f)
+        with open("library.json", "r", encoding = "utf-8") as f:
+            data = json.load(f)
+            for book_dict in data:
+                book = Book(book_dict["title"], book_dict["author"], book_dict["read_status"])
+                self.collection.append(book)
 
     #Returns how many books are in the collection:
     def __len__(self):
