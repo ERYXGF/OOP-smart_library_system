@@ -37,9 +37,9 @@ def menu():
     print("|     5) List all read books                                  |")
     print("|     6) List all unread books                                |")
     print("|     7) Mark a book as read/unread                           |")
-    print("|     9) Save library to file                                 |")
-    print("|     10) Load library from file                              |")
-    print("|     11) Quit Program                                        |")
+    print("|     8) Save library to file                                 |")
+    print("|     9) Load library from file                              |")
+    print("|     10) Quit Program                                        |")
     print("|_____________________________________________________________|")
 
 #Helper Function that actually creates a book and validates:
@@ -79,3 +79,57 @@ def help_create_book():
     book_inst = Book(title, author, read_status)
     return book_inst
 
+
+#Function that processes the users answer to the main menu:
+def handle_menu_option(choice):
+    #Validates choice:
+    if choice < 1 or choice > 10:
+        print("That is not a valid choice. Please choose a number between 1 and 10")
+    #Adds a new book:
+    if choice == 1:
+        new_book = help_create_book()
+        library_inst.add_book(new_book)
+        print("The book was succesfully added.")
+    #Removes an existing book (add BookNotFoundError):
+    elif choice == 2:
+        library_inst.remove_book() #Need to input a title string
+        print("The book was succesfully removed")
+    #Finds a book using title (add BookNotFoundError):
+    elif choice == 3:
+        library_inst.find_book() #Need to input a title string
+    #Lists all existing books:
+    elif choice == 4:
+        library_inst.list_all_books()
+    #Lists all read books:
+    elif choice == 5:
+        library_inst.list_read_books()
+    #Lists all unread books:
+    elif choice == 6:
+        library_inst.list_unread_books()
+    #Marks a book as unread or read:
+    elif choice == 7:
+        #Creates an instance of book:
+        bookinst = Book()
+        #Asks the user what it wants to mark it:
+        subchoice = input("Do you want this book to be marked as Read (R) or Unread (U) ? Please input either R or U. ")
+        #Check if subchoice is empty:
+        subchoice = subchoice.strip().lower()
+        if not subchoice:
+            print("Please input a correct option (R/U):")
+        #Determines if subchoice is valid:
+        if subchoice in ["r", "read"]:
+            bookinst.mark_as_read()
+        elif subchoice in ["u", "unread"]:
+            bookinst.mark_as_unread()
+        else:
+            print("That is not a correct option. Please choose R or U.")
+        library_inst.save_to_json(bookinst)                
+    #Saves libary to file:
+    elif choice == 8:
+        library_inst.save_to_json()
+    #Loads library from a file:
+    elif choice == 9:
+        library_inst.load_from_json()
+    #Quits the program:
+    elif choice == 10:
+        pass 
