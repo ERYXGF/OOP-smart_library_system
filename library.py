@@ -9,6 +9,8 @@ Write a save_to_json() and load_from_json() method that uses each Book's to_dict
 Write a __len__ method that returns the number of books in the collection.
 """
 
+#Imports exception file to handle the specific error:
+from exceptions import BookNotFoundError
 #Imports path module to be able to open paths to files:
 from pathlib import Path
 
@@ -39,7 +41,7 @@ class Library():
                 self.collection.remove(book)
                 return
         #Raises an error if the title isn't found:
-        raise Exception(f"Book {title} wasn't found.")
+        raise BookNotFoundError(f"Book {title} wasn't found.")
 
     #Searches for the book title and returns it:
     def find_book(self, title):
@@ -48,7 +50,7 @@ class Library():
             if book.title == title:
                 return book
         #Raise an error if the title isn't found:
-        raise Exception(f"Book {title} wasn't found")
+        raise BookNotFoundError(f"Book {title} wasn't found")
 
     #Prints all books:
     def list_all_books(self):
