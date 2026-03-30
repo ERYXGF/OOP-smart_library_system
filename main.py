@@ -42,5 +42,40 @@ def menu():
     print("|     11) Quit Program                                        |")
     print("|_____________________________________________________________|")
 
+#Helper Function that actually creates a book and validates:
 def help_create_book():
-    pass
+    while True:
+        #Checks if the title is valid:
+        answer = input("Please enter the book's title: ")
+        answer = answer.strip()
+        if not answer:
+            print("Please enter the book's title: ")
+            continue
+        title = answer
+        break
+    while True:
+        #Checks if the author is valid:
+        answer2 = input("Please enter the book's author: ")
+        answer2 = answer2.strip()
+        if not answer2:
+            print("Please enter the book's author: ")
+            continue
+        author = answer2
+        break
+    while True:
+        #Gets the read_status:
+        answer3 = input("Do you want to mark this book as read (y) or unread (n) ? ")
+        #Checks if it actually contains anything:
+        answer3 = answer3.strip().lower()
+        if not answer3:
+            print("Please enter the book's read_status")
+            continue
+        #Assigns the read_status:
+        if answer3 in ["y", "yes"]:
+            read_status = True
+        else:
+            read_status = False
+        break
+    book_inst = Book(title, author, read_status)
+    return book_inst
+
