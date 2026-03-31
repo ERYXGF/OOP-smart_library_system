@@ -21,6 +21,7 @@ Searching books by author, displaying statistics (total books, read percentage),
 #Imports Book and Library class to be used below:
 from book import Book
 from library import Library
+from exceptions import BookNotFoundError
 
 #Creates a library instance that will be used throughout the file: 
 library_inst = Library()
@@ -85,6 +86,7 @@ def handle_menu_option(choice):
     #Validates choice:
     if choice < 1 or choice > 10:
         print("That is not a valid choice. Please choose a number between 1 and 10")
+        return
     #Adds a new book:
     if choice == 1:
         new_book = help_create_book()
@@ -92,11 +94,33 @@ def handle_menu_option(choice):
         print("The book was succesfully added.")
     #Removes an existing book (add BookNotFoundError):
     elif choice == 2:
-        library_inst.remove_book() #Need to input a title string
-        print("The book was succesfully removed")
-    #Finds a book using title (add BookNotFoundError):
+        #Gets the books title:
+        title = input("What is the title of the book you want to remove ?")
+        #If the title input is empty:
+        title = title.strip()
+        if not title:
+            print("Please enter a correct title:")
+        #Checks if title exists:
+        try:
+            library_inst.remove_book(title) #Need to input a title string
+            print("The book was succesfully removed")
+        except BookNotFoundError:
+            print("The title does not exist yet. Please input an elready existing title.")
+            return
     elif choice == 3:
-        library_inst.find_book() #Need to input a title string
+        #Gets the books title:
+        title = input("What is the title of the book you want to find ?")
+        #If the title input is empty:
+        title = title.strip()
+        if not title:
+            print("Please enter a correct title:")
+        #Checks if title exists:
+        try:
+            library_inst.find_book(title)
+            print("The book was succesfuly found.")
+        except BookNotFoundError:
+            print("That title does not exist yet. Please input an already existing title. ")
+            return
     #Lists all existing books:
     elif choice == 4:
         library_inst.list_all_books()
@@ -109,21 +133,34 @@ def handle_menu_option(choice):
     #Marks a book as unread or read:
     elif choice == 7:
         #Creates an instance of book:
-        bookinst = Book()
+        bookinst = Book("test", "test", False)
         #Asks the user what it wants to mark it:
         subchoice = input("Do you want this book to be marked as Read (R) or Unread (U) ? Please input either R or U. ")
         #Check if subchoice is empty:
         subchoice = subchoice.strip().lower()
         if not subchoice:
             print("Please input a correct option (R/U):")
+        #Gets the books title:
+        title = input("What is the title of the book you want to mark ?")
+        #If the title input is empty:
+        title = title.strip()
+        if not title:
+            print("Please enter a correct title:")
+        #Checks if title exists:
+        try:
+            library_inst.find_book(title)
+        except BookNotFoundError:
+            print("That title does not exist yet. Please input an already existing title. ")
+            return
         #Determines if subchoice is valid:
         if subchoice in ["r", "read"]:
-            bookinst.mark_as_read()
+            bookinst.mark_as_read(title)
         elif subchoice in ["u", "unread"]:
-            bookinst.mark_as_unread()
+            bookinst.mark_as_unread(title)
         else:
             print("That is not a correct option. Please choose R or U.")
-        library_inst.save_to_json(bookinst)                
+        #Saves the choice to the jsoon file:
+        library_inst.save_to_json()                
     #Saves libary to file:
     elif choice == 8:
         library_inst.save_to_json()
@@ -132,4 +169,4 @@ def handle_menu_option(choice):
         library_inst.load_from_json()
     #Quits the program:
     elif choice == 10:
-        pass 
+        return 
