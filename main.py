@@ -100,6 +100,7 @@ def handle_menu_option(choice):
         title = title.strip()
         if not title:
             print("Please enter a correct title:")
+            return
         #Checks if title exists:
         try:
             library_inst.remove_book(title) #Need to input a title string
@@ -107,6 +108,7 @@ def handle_menu_option(choice):
         except BookNotFoundError:
             print("The title does not exist yet. Please input an elready existing title.")
             return
+    #Finds a book using title:
     elif choice == 3:
         #Gets the books title:
         title = input("What is the title of the book you want to find ?")
@@ -114,10 +116,11 @@ def handle_menu_option(choice):
         title = title.strip()
         if not title:
             print("Please enter a correct title:")
+            return
         #Checks if title exists:
         try:
-            library_inst.find_book(title)
-            print("The book was succesfuly found.")
+            new_book = library_inst.find_book(title)
+            print (f"Found: {new_book}.")
         except BookNotFoundError:
             print("That title does not exist yet. Please input an already existing title. ")
             return
@@ -132,33 +135,36 @@ def handle_menu_option(choice):
         library_inst.list_unread_books()
     #Marks a book as unread or read:
     elif choice == 7:
-        #Creates an instance of book:
-        bookinst = Book("test", "test", False)
         #Asks the user what it wants to mark it:
         subchoice = input("Do you want this book to be marked as Read (R) or Unread (U) ? Please input either R or U. ")
         #Check if subchoice is empty:
         subchoice = subchoice.strip().lower()
         if not subchoice:
             print("Please input a correct option (R/U):")
+            return
         #Gets the books title:
         title = input("What is the title of the book you want to mark ?")
         #If the title input is empty:
         title = title.strip()
         if not title:
             print("Please enter a correct title:")
+            return
         #Checks if title exists:
         try:
-            library_inst.find_book(title)
+            book_to_mark = library_inst.find_book(title)
         except BookNotFoundError:
             print("That title does not exist yet. Please input an already existing title. ")
             return
         #Determines if subchoice is valid:
         if subchoice in ["r", "read"]:
-            bookinst.mark_as_read(title)
+            book_to_mark.mark_as_read()
+            print(f"The book {title} was succesfully marked as read.")
         elif subchoice in ["u", "unread"]:
-            bookinst.mark_as_unread(title)
+            book_to_mark.mark_as_unread()
+            print(f"The book {title} was successfully marked as unread.")
         else:
             print("That is not a correct option. Please choose R or U.")
+            return 
         #Saves the choice to the jsoon file:
         library_inst.save_to_json()                
     #Saves libary to file:
