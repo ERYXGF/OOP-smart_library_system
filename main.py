@@ -204,3 +204,6 @@ def main():
             break
         #Clears the terminal in between each operation:
         os.system("cls" if os.name == "nt" else "clear")
+
+if __name__ == "__main__":
+    main()
