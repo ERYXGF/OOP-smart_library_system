@@ -23,6 +23,9 @@ from book import Book
 from library import Library
 from exceptions import BookNotFoundError
 
+#Imports OS to be able to clear the screen between operations:
+import os
+
 #Creates a library instance that will be used throughout the file: 
 library_inst = Library()
 
@@ -176,3 +179,28 @@ def handle_menu_option(choice):
     #Quits the program:
     elif choice == 10:
         return 
+
+#Main function that ties everything together:
+def main():
+    #Infinite loop:
+    while True:
+        #Displays the menu:
+        menu()
+        #Gets the user's choice:
+        try:
+            choice = int(input("Please enter your choice (1-10) "))
+        except ValueError:
+            print("Please input a numerical value (1-10)")
+            continue
+        #Checks if the choice is between 1 and 10:
+        if choice not in range(1,11):
+            print("That is not a valid choice (1-10)")
+            continue
+        #Executes the program:
+        handle_menu_option(choice)
+        #Checks if user wants to quit the program:
+        if choice == 10:
+            print("Thanks for using the OOP Smart Library System. See you soon !")
+            break
+        #Clears the terminal in between each operation:
+        os.system("cls" if os.name == "nt" else "clear")
